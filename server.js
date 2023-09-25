@@ -23,6 +23,33 @@ app.get('/', (req, res) => {
 app.get('/signup', (req, res) => {
     res.render('signup')
   })
+app.get('/loginsubmit', (req,res) =>{
+  const email = req.query.email;
+  const password = req.query.password;
+
+  db.collection('users')
+    .where('email', "==" ,email)
+    .where('password', "==" , password)
+    .get()
+    .then((docs) => {
+      if (docs.size>0){
+        var usersData=[];
+        db.collection('users').get().then(()=>{
+          docs.forEach((doc)=>{
+           usersData.push(doc.data());
+          });
+        })
+        .then(()=>{
+        console.log(usersData);
+        res.render('home', {usersData: usersData})
+        })
+      }
+      else{
+        res.send("login failed");
+      }
+      
+    });
+});
   app.get('/signupsubmit', (req, res) => {
   
     const fullname = req.query.fullname;
@@ -36,7 +63,7 @@ app.get('/signup', (req, res) => {
     email: email,
     password: password,
   }).then(()=>{
-    res.send("signedup successfully")
+    res.render('login')
   });
 
   });
