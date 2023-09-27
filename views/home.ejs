@@ -1,3 +1,27 @@
-<html>
-    <h1>WELCOME TO THE HOME PAGE</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Data</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather Data</h1>
+        <form id="weatherForm">
+            <label for="latitude">Latitude:</label>
+            <input type="text" id="latitude" placeholder="Enter latitude">
+            <label for="longitude">Longitude:</label>
+            <input type="text" id="longitude" placeholder="Enter longitude">
+            <button type="submit">Get Weather</button>
+        </form>
+        <div id="weatherInfo">
+            <h1>WEATHER REPORT</h1>
+        </div>
+        <div>
+            <h1>history</h1>
+        </div>
+    </div>
+    <script src="server.js"></script>
+</body>
 </html>
