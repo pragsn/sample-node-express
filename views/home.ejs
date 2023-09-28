@@ -7,20 +7,24 @@
 </head>
 <body>
     <div class="container">
+        <form action="/weatherinfo" method="GET">
         <h1>Weather Data</h1>
-        <form id="weatherForm">
-            <label for="latitude">Latitude:</label>
-            <input type="text" id="latitude" placeholder="Enter latitude">
-            <label for="longitude">Longitude:</label>
-            <input type="text" id="longitude" placeholder="Enter longitude">
+
+            <label for="location">Location:</label>
+            <input type="text" id="location" placeholder="Enter location" name="location">
             <button type="submit">Get Weather</button>
         </form>
-        <div id="weatherInfo">
+        <div>
             <h1>WEATHER REPORT</h1>
+            <% if(result) { %> <%= JSON.stringify(result) %> <% } %>
+        
+ 
         </div>
         <div>
             <h1>history</h1>
+
         </div>
+    </form>
     </div>
     <script src="server.js"></script>
 </body>

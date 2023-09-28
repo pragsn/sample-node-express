@@ -2,13 +2,15 @@ const express = require('express');
 const axios = require('axios');
 const app = express();
 const port = 3003
+const request = require('request');
 var passwordHash = require('password-hash');
 var bodyParser = require('body-parser');
 const {initializeApp , cert} = require('firebase-admin/app');
 const { getFirestore }  = require('firebase-admin/firestore');
 
-
 var serviceAccount = require('./key.json');
+
+const apikey ="532439bf35034f40b0780536232809"
 
 initializeApp({
   credential: cert(serviceAccount),
@@ -26,32 +28,33 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 
+app.get('/weatherinfo', (req,res)=>{
+  if(req.query.location){
+    db.collection('weatherhistory')
+    .add({
+      name: req.query.location
+    })
+    .then(()=>{
+      request("http://api.weatherapi.com/v1/current.json?key=532439bf35034f40b0780536232809&q=" +
+     req.query.location +
+    "&aqi=no",function(error,response,body){
+    const data={
+    temp: JSON.parse(body).current.temp_c,
+    name :JSON.parse(body).location.name,
+    region: JSON.parse(body).location.region,
+    last_updated: JSON.parse(body).current.last_updated,
+    } 
+    res.render('home', {result:data});  
+    })
 
-app.post('/home', async (req, res) => {
-  const apiKey = '8d90a3a1da5db908fade0efae0e9773e'; 
-  const latitude = req.query.latitude;
-  const longitude = req.query.longitude;
-
-
-  try {
-      const response = await axios.get('https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric');
-      const weatherData = response.data;
+    })
     
-      res.render('home', {
-          location: `Latitude: ${latitude}, Longitude: ${longitude}`,
-          temperature: weatherData.main.temp,
-          weatherDescription: weatherData.weather[0].description,
-
-      })
-  } catch (error) {
-      console.error(error);
-      res.send('Error fetching weather data.');
   }
+  else{
+    res.send('location not found!')
+  }
+});
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
-});
 
 app.get('/signup', (req, res) => {
     res.render('signup')
@@ -73,7 +76,7 @@ app.post('/loginsubmit', (req,res) =>{
       })
       console.log(docs);
       if(verified){
-        res.render('home');
+        res.render('home', {result:null});
       }
       else{
         res.send("login failed");
