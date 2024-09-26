@@ -53,7 +53,7 @@ app.get('/weatherinfo', (req,res)=>{
   else{
     res.send('location not found!')
   }
-});
+}); 
 
 
 app.get('/signup', (req, res) => {
